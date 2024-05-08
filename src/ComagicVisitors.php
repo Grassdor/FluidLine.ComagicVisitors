@@ -60,7 +60,7 @@ class ComagicVisitors
                 $this->suffix = "WM";
                 break;
         }
-        file_put_contents("php://output", "Пайтон BLYAT");
+        file_put_contents("php://output", "Work in process");
         $this->databaseConnection($this->suffix);
     }
 
