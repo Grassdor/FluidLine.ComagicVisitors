@@ -20,7 +20,6 @@ services:
     #expose ports
     ports:
       - "8082:80"
-      - "8083:43"
 
     #persistent volume
     volumes: 

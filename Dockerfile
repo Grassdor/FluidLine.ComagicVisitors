@@ -8,30 +8,30 @@ RUN apk update && apk upgrade
 # Install apline utilities and php depedencies
 RUN apk add --no-cache \
     bash \
-    php8.2 \ 
-    php8.2-fpm \ 
-    php8.2-opcache \
-    php8.2-gd \
-    php8.2-zlib \
-    php8.2-curl \
-    php8.2-bcmath \
-    php8.2-ctype \
-    php8.2-iconv \
-    php8.2-intl \
-    php8.2-json \
-    php8.2-mbstring \
-    php8.2-mysqlnd \
-    php8.2-openssl \
-    php8.2-pdo \
-    php8.2-pdo_mysql \
-    php8.2-pdo_pgsql \
-    php8.2-pdo_sqlite \
-    php8.2-phar \
-    php8.2-posix \
-    php8.2-session \
-    php8.2-soap \
-    php8.2-xml \
-    php8.2-zip \
+    php8 \ 
+    php8-fpm \ 
+    php8-opcache \
+    php8-gd \
+    php8-zlib \
+    php8-curl \
+    php8-bcmath \
+    php8-ctype \
+    php8-iconv \
+    php8-intl \
+    php8-json \
+    php8-mbstring \
+    php8-mysqlnd \
+    php8-openssl \
+    php8-pdo \
+    php8-pdo_mysql \
+    php8-pdo_pgsql \
+    php8-pdo_sqlite \
+    php8-phar \
+    php8-posix \
+    php8-session \
+    php8-soap \
+    php8-xml \
+    php8-zip \
     libmcrypt-dev \
     libltdl 
 
@@ -60,16 +60,19 @@ RUN apk add nginx
 
 # Install PHP Composer, If you use composer, you can uncomment this one.
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # copy project file to nginx inside docker.
-COPY ./ /data/www
+COPY ./ /var/www/comagic
 
 # Copy default config and paste it into nginx config path inside docker.
 COPY ./nginx-configs/default.conf /etc/nginx/conf.d/default.conf
 
+RUN composer install --working-dir=/var/www/comagic
+
 # Expose port to be visible outside the container.
 EXPOSE 80
-EXPOSE 443
+
 
 STOPSIGNAL SIGTERM
 
