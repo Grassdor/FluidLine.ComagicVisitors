@@ -1,6 +1,12 @@
 {
     "name": "grassdor/app",
     "version": "2.0.0",
+    "config": {
+        "preferred-install": {
+            "symfony/polyfill-*": "source",
+            "*": "dist"
+        }
+    },
     "require": {
         "vlucas/phpdotenv": "^5.6"
     },

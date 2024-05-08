@@ -1,13 +1,13 @@
 <?php
+namespace App;
 
 require_once(__DIR__ . "/../vendor/autoload.php");
 
-namespace App;
 
 use PDO;
 
-$input = file_get_contents("php://input");
-$cv = new ComagicVisitors($input);
+// $input = file_get_contents("php://input");
+// $cv = new ComagicVisitors($input);
 
 /**
  * Обработка уведомлений Comagic о звонках
@@ -37,7 +37,7 @@ class ComagicVisitors
     public function __construct(string $json)
     {
         $this->json = json_decode($json, true);
-        $this->siteIdentification();
+        $this->domainIdentification();
         $this->createTable();
     }
 
@@ -60,6 +60,7 @@ class ComagicVisitors
                 $this->suffix = "WM";
                 break;
         }
+        file_put_contents("php://output", "Пайтон BLYAT");
         $this->databaseConnection($this->suffix);
     }
 
