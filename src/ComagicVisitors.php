@@ -59,6 +59,8 @@ class ComagicVisitors
             case "wika-manometry.ru":
                 $this->suffix = "WM";
                 break;
+            default:
+                new \Exception("Ошибка: Неверное доменное имя");
         }
         file_put_contents("php://output", "Work in process");
         $this->databaseConnection($this->suffix);
@@ -75,12 +77,80 @@ class ComagicVisitors
 
     protected function callDataProcessing(): void
     {
-
+        if (
+            $this->json['call_source'] ||
+            $this->json['direction'] ||
+            $this->json['talk_time_duration'] ||
+            $this->json['total_time_duration'] ||
+            $this->json['wait_time_duration'] ||
+            $this->json['tag_names'] ||
+            $this->json['is_lost']
+        ) {
+            $this->droppedCallProcess();
+        } else {
+            $this->incomingCallProcess();
+        }
     }
 
     protected function createTable(): void
     {
         $sql = file_get_contents(__DIR__ . "/../sql/createTable.sql");
         $this->pdo->query($sql);
+    }
+
+    protected function droppedCallProcess(): void
+    {
+        $sql = file_get_contents(__DIR__ . "/../sql/droppedCall.sql");
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue("id", 0, PDO::PARAM_INT);
+        $stmt->bindValue("client_id", $this->json['client_id'], PDO::PARAM_STR);
+        $stmt->bindValue("scenario", 1, PDO::PARAM_INT);
+        $stmt->bindValue("notification_name", $this->json['notification_name'], PDO::PARAM_STR);
+        $stmt->bindValue("virtual_phone_number", $this->json['virtual_phone_number'], PDO::PARAM_STR);
+        $stmt->bindValue("notification_time", $this->json['notification_time'], PDO::PARAM_STR);
+        $stmt->bindValue("advertising_campaign", $this->json['advertising_campaign'], PDO::PARAM_STR);
+        $stmt->bindValue("contact_phone_number", $this->json['contact_phone_number'], PDO::PARAM_STR);
+        $stmt->bindValue("visitor_id", $this->json['visitor_id'], PDO::PARAM_STR);
+        $stmt->bindValue("search_query", $this->json['search_query'], PDO::PARAM_STR);
+        $stmt->bindValue("communication_number", $this->json['communication_number'], PDO::PARAM_STR);
+        $stmt->bindValue("visitor_is_new", $this->json['visitor_is_new'], PDO::PARAM_BOOL);
+        $stmt->bindValue("search_engine", $this->json['search_engine'], PDO::PARAM_STR);
+        $stmt->bindValue("call_session_id", $this->json['call_session_id'], PDO::PARAM_STR);
+        $stmt->bindValue("call_source", $this->json['call_source'], PDO::PARAM_STR);
+        $stmt->bindValue("direction", $this->json['direction'], PDO::PARAM_STR);
+        $stmt->bindValue("talk_time_duration", $this->json['talk_time_duration'], PDO::PARAM_INT);
+        $stmt->bindValue("total_time_duration", $this->json['total_time_duration'], PDO::PARAM_INT);
+        $stmt->bindValue("wait_time_duration", $this->json['wait_time_duration'], PDO::PARAM_INT);
+        $stmt->bindValue("tag_names", $this->json['tag_names'], PDO::PARAM_STR);
+        $stmt->bindValue("is_lost", $this->json['is_lost'], PDO::PARAM_BOOL);
+        $stmt->execute();
+    }
+
+    protected function incomingCallProcess(): void
+    {
+        $sql = file_get_contents(__DIR__ . "/../sql/incomingCall.sql");
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue("id", 0, PDO::PARAM_INT);
+        $stmt->bindValue("client_id", $this->json['client_id'], PDO::PARAM_STR);
+        $stmt->bindValue("scenario", 0, PDO::PARAM_INT);
+        $stmt->bindValue("notification_name", $this->json['notification_name'], PDO::PARAM_STR);
+        $stmt->bindValue("virtual_phone_number", $this->json['virtual_phone_number'], PDO::PARAM_STR);
+        $stmt->bindValue("notification_time", $this->json['notification_time'], PDO::PARAM_STR);
+        $stmt->bindValue("advertising_campaign", $this->json['advertising_campaign'], PDO::PARAM_STR);
+        $stmt->bindValue("contact_phone_number", $this->json['contact_phone_number'], PDO::PARAM_STR);
+        $stmt->bindValue("visitor_id", $this->json['visitor_id'], PDO::PARAM_STR);
+        $stmt->bindValue("search_query", $this->json['search_query'], PDO::PARAM_STR);
+        $stmt->bindValue("communication_number", $this->json['communication_number'], PDO::PARAM_STR);
+        $stmt->bindValue("visitor_is_new", $this->json['visitor_is_new'], PDO::PARAM_BOOL);
+        $stmt->bindValue("search_engine", $this->json['search_engine'], PDO::PARAM_STR);
+        $stmt->bindValue("call_session_id", $this->json['call_session_id'], PDO::PARAM_STR);
+        $stmt->bindValue("call_source", null, PDO::PARAM_NULL);
+        $stmt->bindValue("direction", null, PDO::PARAM_NULL);
+        $stmt->bindValue("talk_time_duration", null, PDO::PARAM_NULL);
+        $stmt->bindValue("total_time_duration", null, PDO::PARAM_NULL);
+        $stmt->bindValue("wait_time_duration", null, PDO::PARAM_NULL);
+        $stmt->bindValue("tag_names", null, PDO::PARAM_NULL);
+        $stmt->bindValue("is_lost", null, PDO::PARAM_NULL);
+        $stmt->execute();
     }
 }
