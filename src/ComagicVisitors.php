@@ -39,6 +39,7 @@ class ComagicVisitors
         $this->json = json_decode($json, true);
         $this->domainIdentification();
         $this->createTable();
+        $this->callDataProcessing();
     }
 
     protected function domainIdentification(): void
@@ -78,13 +79,13 @@ class ComagicVisitors
     protected function callDataProcessing(): void
     {
         if (
-            $this->json['call_source'] ||
-            $this->json['direction'] ||
-            $this->json['talk_time_duration'] ||
-            $this->json['total_time_duration'] ||
-            $this->json['wait_time_duration'] ||
-            $this->json['tag_names'] ||
-            $this->json['is_lost']
+            array_key_exists("call_source", $this->json) ||
+            array_key_exists("direction", $this->json) ||
+            array_key_exists("talk_time_duration", $this->json) ||
+            array_key_exists("total_time_duration", $this->json) ||
+            array_key_exists("wait_time_duration", $this->json) ||
+            array_key_exists("tag_names", $this->json) ||
+            array_key_exists("is_lost", $this->json)
         ) {
             $this->droppedCallProcess();
         } else {
