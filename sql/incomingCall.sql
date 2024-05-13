@@ -14,4 +14,11 @@ VALUES (
     :visitor_is_new,
     :search_engine,
     :call_session_id,
+    :call_source,
+    :direction,
+    :talk_time_duration,
+    :total_time_duration,
+    :wait_time_duration,
+    :tag_names,
+    :is_lost,
 )
