@@ -20,5 +20,5 @@ VALUES (
     :total_time_duration,
     :wait_time_duration,
     :tag_names,
-    :is_lost,
+    :is_lost
 )
