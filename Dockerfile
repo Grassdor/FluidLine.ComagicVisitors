@@ -3,10 +3,17 @@ WORKDIR /var/www/html
 
 COPY . .
 
-ENV DB_HOST_SW=""
-ENV DB_DATABASE_SW=""
-ENV DB_USERNAME_SW=""
-ENV DB_PASSWORD_SW=""
+RUN docker-php-ext-install pdo pdo_mysql
+
+#RUN apt-get update && apt-get install --yes libzip-dev \ libsqlite3-dev
+#RUN docker-php-ext-install mbstring
+
+#ENV COMPOSER_ALLOW_SUPERUSER=1
+
+ENV DB_HOST_SW="swagelok.su"
+ENV DB_DATABASE_SW="fluidacy_swagelo"
+ENV DB_USERNAME_SW="fluidacy_swagelo"
+ENV DB_PASSWORD_SW="*8z0WasZ"
 
 ENV DB_HOST_HL=""
 ENV DB_DATABASE_HL=""
@@ -28,8 +35,10 @@ ENV DB_DATABASE_CZ=""
 ENV DB_USERNAME_CZ=""
 ENV DB_PASSWORD_CZ=""
 
-RUN curl -sS https://getcomposer.org/installer | php -- \
---install-dir=/usr/bin --filename=composer
+#RUN curl -sS https://getcomposer.org/installer | php -- \
+#--install-dir=/usr/bin --filename=composer
 
-RUN composer install
+#RUN composer update
+
+#RUN composer install
 # CMD ["php", "-S", "localhost:8080"]
