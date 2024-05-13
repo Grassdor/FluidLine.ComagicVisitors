@@ -105,7 +105,7 @@ class ComagicVisitors
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue("id", 0, PDO::PARAM_INT);
         $stmt->bindValue("client_id", $this->json['client_id'], PDO::PARAM_STR);
-        $stmt->bindValue("scenario", 1, PDO::PARAM_INT);
+        $stmt->bindValue("scenario", "dropped", PDO::PARAM_STR);
         $stmt->bindValue("notification_name", $this->json['notification_name'], PDO::PARAM_STR);
         $stmt->bindValue("virtual_phone_number", $this->json['virtual_phone_number'], PDO::PARAM_STR);
         $stmt->bindValue("notification_time", $this->json['notification_time'], PDO::PARAM_STR);
@@ -133,7 +133,7 @@ class ComagicVisitors
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue("id", 0, PDO::PARAM_INT);
         $stmt->bindValue("client_id", $this->json['client_id'], PDO::PARAM_STR);
-        $stmt->bindValue("scenario", 0, PDO::PARAM_INT);
+        $stmt->bindValue("scenario", "income", PDO::PARAM_STR);
         $stmt->bindValue("notification_name", $this->json['notification_name'], PDO::PARAM_STR);
         $stmt->bindValue("virtual_phone_number", $this->json['virtual_phone_number'], PDO::PARAM_STR);
         $stmt->bindValue("notification_time", $this->json['notification_time'], PDO::PARAM_STR);

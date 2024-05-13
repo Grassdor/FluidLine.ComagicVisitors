@@ -13,7 +13,7 @@ RUN docker-php-ext-install pdo pdo_mysql
 ENV DB_HOST_SW="swagelok.su"
 ENV DB_DATABASE_SW="fluidacy_swagelo"
 ENV DB_USERNAME_SW="fluidacy_swagelo"
-ENV DB_PASSWORD_SW="*8z0WasZ"
+ENV DB_PASSWORD_SW="KTzx%3FB"
 
 ENV DB_HOST_HL=""
 ENV DB_DATABASE_HL=""

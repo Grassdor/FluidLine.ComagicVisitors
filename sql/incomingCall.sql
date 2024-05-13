@@ -1,4 +1,4 @@
-INSERT INTO `call_data`
+INSERT INTO `calls_data`
 VALUES (
     :id,
     :client_id,
