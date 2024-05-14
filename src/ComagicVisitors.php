@@ -159,12 +159,12 @@ class ComagicVisitors
         $sql = "SELECT `id` FROM `visitors_info`
             WHERE `client_id` = :cid";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue("cid", $this->json['client_id']);
+        $stmt->bindValue("cid", $this->json['visitor_fldClientId']);
         $stmt->execute();
         $response = $stmt->fetch();
-        if ($response) {
-            return (int) $response;
+        if (!$response) {
+            return 0;
         }
-        return 0;
+        return $response[0];
     }
 }

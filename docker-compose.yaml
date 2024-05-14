@@ -3,10 +3,11 @@ version: "1.0"
 services:
   backend:
     # Specify Image name
-    image: backend
-
+    image: comagic_visitors
+    env_file:
+      - .env
     # Specify Container name
-    container_name: backend
+    container_name: comagic_visitors
 
     # specify context and dockerfile to build
     build: 
