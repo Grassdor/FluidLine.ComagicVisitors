@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS `calls_data` (
             `talk_time_duration` INT,
             `total_time_duration` INT,
             `wait_time_duration` INT,
-            `tag_names` VARCHAR(255),
             `is_lost` BOOLEAN,
             FOREIGN KEY (client_id) REFERENCES visitors_info (id)
 )

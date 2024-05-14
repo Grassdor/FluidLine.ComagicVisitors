@@ -1,5 +1,6 @@
 <?php
 namespace App;
+use Exception;
 
 require_once(__DIR__ . "/../vendor/autoload.php");
 
@@ -54,7 +55,7 @@ class ComagicVisitors
             case "swagelok.su":
                 $this->suffix = "SW";
                 break;
-            case "camozzi.ru.net":
+            case "www.camozzi.ru.net":
                 $this->suffix = "CZ";
                 break;
             case "wika-manometry.ru":
@@ -104,7 +105,7 @@ class ComagicVisitors
         $sql = file_get_contents(__DIR__ . "/../sql/droppedCall.sql");
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue("id", 0, PDO::PARAM_INT);
-        $stmt->bindValue("client_id", $this->json['client_id'], PDO::PARAM_STR);
+        $stmt->bindValue("client_id", $this->getClientId(), PDO::PARAM_INT);
         $stmt->bindValue("scenario", "dropped", PDO::PARAM_STR);
         $stmt->bindValue("notification_name", $this->json['notification_name'], PDO::PARAM_STR);
         $stmt->bindValue("virtual_phone_number", $this->json['virtual_phone_number'], PDO::PARAM_STR);
@@ -122,7 +123,6 @@ class ComagicVisitors
         $stmt->bindValue("talk_time_duration", $this->json['talk_time_duration'], PDO::PARAM_INT);
         $stmt->bindValue("total_time_duration", $this->json['total_time_duration'], PDO::PARAM_INT);
         $stmt->bindValue("wait_time_duration", $this->json['wait_time_duration'], PDO::PARAM_INT);
-        $stmt->bindValue("tag_names", $this->json['tag_names'], PDO::PARAM_STR);
         $stmt->bindValue("is_lost", $this->json['is_lost'], PDO::PARAM_BOOL);
         $stmt->execute();
     }
@@ -132,7 +132,7 @@ class ComagicVisitors
         $sql = file_get_contents(__DIR__ . "/../sql/incomingCall.sql");
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue("id", 0, PDO::PARAM_INT);
-        $stmt->bindValue("client_id", $this->json['client_id'], PDO::PARAM_STR);
+        $stmt->bindValue("client_id", $this->getClientId(), PDO::PARAM_INT);
         $stmt->bindValue("scenario", "income", PDO::PARAM_STR);
         $stmt->bindValue("notification_name", $this->json['notification_name'], PDO::PARAM_STR);
         $stmt->bindValue("virtual_phone_number", $this->json['virtual_phone_number'], PDO::PARAM_STR);
@@ -150,8 +150,21 @@ class ComagicVisitors
         $stmt->bindValue("talk_time_duration", null, PDO::PARAM_NULL);
         $stmt->bindValue("total_time_duration", null, PDO::PARAM_NULL);
         $stmt->bindValue("wait_time_duration", null, PDO::PARAM_NULL);
-        $stmt->bindValue("tag_names", null, PDO::PARAM_NULL);
         $stmt->bindValue("is_lost", null, PDO::PARAM_NULL);
         $stmt->execute();
+    }
+
+    protected function getClientId(): int
+    {
+        $sql = "SELECT `id` FROM `visitors_info`
+            WHERE `client_id` = :cid";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue("cid", $this->json['client_id']);
+        $stmt->execute();
+        $response = $stmt->fetch();
+        if ($response) {
+            return (int) $response;
+        }
+        return 0;
     }
 }

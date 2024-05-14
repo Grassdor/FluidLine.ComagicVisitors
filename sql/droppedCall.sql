@@ -19,6 +19,5 @@ VALUES (
     :talk_time_duration,
     :total_time_duration,
     :wait_time_duration,
-    :tag_names,
     :is_lost
 )
